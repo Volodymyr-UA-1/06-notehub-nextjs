@@ -5,8 +5,6 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 
 
-
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

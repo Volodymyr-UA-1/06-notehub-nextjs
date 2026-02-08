@@ -19,15 +19,9 @@ export interface FetchNotesParams {
   perPage?: number;
 }
 
-export const fetchNotes = async ({
-  search = "",
-  page = 1,
-  perPage = 12,
-}: FetchNotesParams): Promise<FetchNotesResponse> => {
-  const { data } = await api.get<FetchNotesResponse>("/notes", {
-    params: { search, page, perPage },
-  });
-  return data;
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const res = await api.get<Note>(`/notes/${id}`);
+  return res.data;
 };
 
 //  Створити нову нотатку
@@ -41,5 +35,19 @@ export const createNote = async (
 //  Видалити нотатку за ID
 export const deleteNote = async (id: string): Promise<Note> => {
   const { data } = await api.delete<Note>(`/notes/${id}`);
+  return data;
+};
+export const fetchNotes = async ({
+  search = "",
+  page = 1,
+  perPage = 12,
+}: FetchNotesParams): Promise<FetchNotesResponse> => {
+  const { data } = await api.get<FetchNotesResponse>("/notes", {
+    params: {
+      search,
+      page,
+      perPage,
+    },
+  });
   return data;
 };
