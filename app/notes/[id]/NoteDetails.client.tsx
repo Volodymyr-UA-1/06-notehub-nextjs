@@ -7,19 +7,25 @@ import css from './NoteDetails.module.css';
 import Error from "./error";
 
 export default function NoteDetailsClient() {
-    const { id } = useParams<{ id: string }>();
+    const params = useParams();
+    const idParam = params.id;
+
+    if (!idParam) return <p>Note ID is missing</p>;
+
+    // Беремо рядок, якщо це масив — перший елемент
+    const id = Array.isArray(idParam) ? idParam[0] : idParam;
 
     const { data: note, isLoading, error } = useQuery({
         queryKey: ['note', id],
         queryFn: () => fetchNoteById(id),
+        enabled: !!id,
     });
 
-    if (isLoading) {
-        return <p>Loading, please wait...</p>;
-    }
-    if (error || !note) {
-        return <p>Something went wrong.</p>;
-    }
+    if (isLoading) return <p>Loading, please wait...</p>;
+    if (error || !note)
+        return (
+            <Error message={error instanceof Error ? error.message : "Note not found"} />
+        );
 
     return (
         <div className={css.container}>
@@ -29,8 +35,8 @@ export default function NoteDetailsClient() {
                 </div>
                 <p className={css.tag}>{note.tag}</p>
                 <p className={css.content}>{note.content}</p>
-                <p className={css.date}>{note.createdAt}</p>
+                <p className={css.date}>{new Date(note.createdAt).toLocaleString()}</p>
             </div>
         </div>
-    )
+    );
 }

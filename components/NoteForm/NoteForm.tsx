@@ -3,8 +3,8 @@ import { Formik } from 'formik';
 import { useId } from "react";
 import * as Yup from 'yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createNote } from '../../services/noteService';
-import type { Note } from '../../types/note';
+import { createNote } from '@/lib/api/api';
+import { Note } from '@/types/note';
 
 interface NoteFormProps {
     onCancel: () => void;

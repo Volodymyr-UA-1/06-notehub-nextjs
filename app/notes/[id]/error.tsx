@@ -1,7 +1,7 @@
 'use client';
 
-export default function Error({ error }: { error: Error }) {
-    return <p>Could not fetch note details. {error.message}</p>;
+export default function Error({ message }: { message: string }) {
+    return <p>Could not fetch note details. {message}</p>;
 }
 
 
