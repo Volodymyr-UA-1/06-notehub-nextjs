@@ -1,13 +1,17 @@
+import Link from 'next/link';
+import css from '@/components/Header/Header.module.css'
+
 const Header = () => {
     return (
-        <header>
-            <a href="/" aria-label="Home">
+        <header className={css.header}>
+
+            <Link href="/" aria-label="Home">
                 NoteHub
-            </a>
+            </Link>
             <nav>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/">Notes</a></li>
+                <ul className={css.navigation}>
+                    <li><Link href="/">Home</Link></li>
+                    <li><Link href="/">Notes</Link></li>
                 </ul>
             </nav>
         </header>
