@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
@@ -10,7 +9,6 @@ import Pagination from "@/components/Pagination/Pagination";
 import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
 import EmptyState from "@/components/EmptyState/EmptyState";
-
 import css from "./Notes.module.css";
 
 const perPage = 12;
@@ -19,7 +17,6 @@ interface NotesClientProps {
     search: string;
     currentPage: number;
 }
-
 export default function NotesClient({ search: initialSearch, currentPage: initialPage }: NotesClientProps) {
     // Використовуємо пропси як початкові значення для useState
     const [search, setSearch] = useState(initialSearch);
