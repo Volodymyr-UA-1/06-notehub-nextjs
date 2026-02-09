@@ -4,6 +4,7 @@ import { deleteNote } from "@/lib/api/api";
 import { useState } from "react";
 import type { Note } from "../../types/note";
 import Link from "next/link";
+import EmptyState from "../EmptyState/EmptyState"; // ← підключили компонент
 
 interface NoteListProps {
     notes: Note[];
@@ -15,23 +16,18 @@ export default function NoteList({ notes }: NoteListProps) {
 
     const { mutate } = useMutation({
         mutationFn: deleteNote,
-        onMutate: (id: string) => {
-            setDeletingId(id);
-        },
+        onMutate: (id: string) => setDeletingId(id),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 predicate: (query) =>
-                    Array.isArray(query.queryKey) &&
-                    query.queryKey[0] === "notes",
+                    Array.isArray(query.queryKey) && query.queryKey[0] === "notes",
             });
         },
-        onSettled: () => {
-            setDeletingId(null);
-        },
+        onSettled: () => setDeletingId(null),
     });
 
-    if (notes.length === 0) {
-        return <p className={css.empty}>No notes found</p>;
+    if (!notes || notes.length === 0) {
+        return <EmptyState />; // дефолтне повідомлення
     }
 
     return (
@@ -48,13 +44,15 @@ export default function NoteList({ notes }: NoteListProps) {
                             <span className={css.tag}>{note.tag}</span>
 
                             <div className={css.actions}>
-                                {/* Нове посилання для переходу до деталей */}
-                                <Link href={`/notes/${note.id}`} className={css.detailsLink}>
+                                <Link
+                                    href={`/notes/${note.id}`}
+                                    className={css.detailsLink}
+                                >
                                     View details
                                 </Link>
 
                                 <button
-                                    className={css.deleteBtn}
+                                    className={css.button}
                                     onClick={() => mutate(note.id)}
                                     disabled={isDeleting}
                                 >

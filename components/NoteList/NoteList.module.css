@@ -36,6 +36,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-clamp: 3;
 }
 
 .button {
@@ -91,4 +92,12 @@
 
 .link:hover {
   background-color: #0b5ed7;
+}
+.detailsLink {
+  color: blue;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.detailsLink:hover {
+  color: rgb(15, 15, 138);
 }

@@ -1,7 +1,7 @@
 import css from './EmptyState.module.css';
 
 interface EmptyStateProps {
-    message: string;
+    message?: string;
 }
 
 export default function EmptyState({

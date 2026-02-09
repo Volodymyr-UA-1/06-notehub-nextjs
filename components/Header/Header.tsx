@@ -1,20 +1,33 @@
 import Link from 'next/link';
-import css from '@/components/Header/Header.module.css'
+import css from '@/components/Header/Header.module.css';
 
-const Header = () => {
+interface HeaderProps {
+    menuItems?: { title: string; href: string }[];
+}
+
+const Header = ({
+    menuItems = [
+        { title: 'Home', href: '/' },
+        { title: 'Notes', href: '/notes' },
+    ],
+}: HeaderProps) => {
     return (
         <header className={css.header}>
-
-            <Link href="/" aria-label="Home">
+            <Link href="/" aria-label="Home" className={css.logo}>
                 NoteHub
             </Link>
+
             <nav>
                 <ul className={css.navigation}>
-                    <li><Link href="/">Home</Link></li>
-                    <li><Link href="/">Notes</Link></li>
+                    {menuItems.map((item) => (
+                        <li key={item.href}>
+                            <Link href={item.href}>{item.title}</Link>
+                        </li>
+                    ))}
                 </ul>
             </nav>
         </header>
-    )
-}
+    );
+};
+
 export default Header;

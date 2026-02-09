@@ -1,11 +1,13 @@
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
-import NotesClient from './Notes.client';
+import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { fetchNotes } from '@/lib/api/api';
+import NotesClient from '../Notes.client';
 
-interface NotesPageProps {
-    searchParams: { search?: string; page?: string };
-}
+type NotesPageProps = {
+    searchParams: {
+        search?: string;
+        page?: string;
+    };
+};
 
 export default async function NotesPage({ searchParams }: NotesPageProps) {
     const search = searchParams.search ?? '';
@@ -13,16 +15,16 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
 
     const queryClient = new QueryClient();
 
-    // prefetch на сервері
     await queryClient.prefetchQuery({
         queryKey: ['notes', search, currentPage],
         queryFn: () => fetchNotes({ search, page: currentPage, perPage: 12 }),
     });
 
-    // передаємо гідратовані дані у TanStackProvider
+    const dehydratedState = dehydrate(queryClient);
+
     return (
-        <TanStackProvider dehydratedState={dehydrate(queryClient)}>
+        <HydrationBoundary state={dehydratedState}>
             <NotesClient search={search} currentPage={currentPage} />
-        </TanStackProvider>
+        </HydrationBoundary>
     );
 }

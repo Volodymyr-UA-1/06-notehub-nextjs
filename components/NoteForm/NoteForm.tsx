@@ -1,3 +1,4 @@
+'use client';
 import css from './NoteForm.module.css';
 import { Formik } from 'formik';
 import { useId } from "react";
