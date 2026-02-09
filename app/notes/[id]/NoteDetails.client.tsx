@@ -13,10 +13,10 @@ export default function NoteDetailsClient({ id }: NoteDetailsClientProps) {
     const { data: note, isLoading, error } = useQuery({
         queryKey: ['note', id],
         queryFn: () => fetchNoteById(id),
+        refetchOnMount: false,
     });
 
     if (isLoading) return <p>Loading...</p>;
-
     if (error || !note) {
         const message = error instanceof Error ? error.message : 'Note not found';
         return <EmptyState message={message} />;

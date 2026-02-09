@@ -1,31 +1,30 @@
-import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { fetchNotes } from '@/lib/api';
-import NotesClient from '../Notes.client';
 
-type NotesPageProps = {
-    searchParams: Promise<{
-        search?: string;
-        page?: string;
-    }>;
+import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { fetchNoteById } from '@/lib/api';
+import NoteDetailsClient from './NoteDetails.client'; // Переконайтеся, що шлях правильний
+
+type NotePageProps = {
+    params: Promise<{ id: string }>; // Використовуємо params, як просив викладач
 };
 
-export default async function NotesPage({ searchParams }: NotesPageProps) {
-    const params = await searchParams;
-    const search = params.search ?? '';
-    const currentPage = Number(params.page ?? '1');
+export default async function NotePage({ params }: NotePageProps) {
+    // 1. Отримуємо id через await 
+    const { id } = await params;
 
     const queryClient = new QueryClient();
 
+    // 2. Префетчимо саме одну нотатку за ID 
     await queryClient.prefetchQuery({
-        queryKey: ['notes', search, currentPage],
-        queryFn: () => fetchNotes({ search, page: currentPage, perPage: 12 }),
+        queryKey: ['note', id],
+        queryFn: () => fetchNoteById(id),
     });
 
     const dehydratedState = dehydrate(queryClient);
 
     return (
         <HydrationBoundary state={dehydratedState}>
-            <NotesClient search={search} currentPage={currentPage} />
+            {/* 3. Передаємо id в правильний клієнтський компонент */}
+            <NoteDetailsClient id={id} />
         </HydrationBoundary>
     );
 }
